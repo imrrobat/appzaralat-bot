@@ -21,10 +21,18 @@ async def start_handler(pm: Message):
 
 
 async def percent_handler(message: Message):
-    text = message.text
+    # متن بعد از کامند (اگر کاربر ریپلای یا چند خطی فرستاده)
+    text = message.text.split("\n", 1)
 
-    match = percent_pattern.match(text)
+    if len(text) < 2:
+        await message.answer("فرمت درست: \n/precent\n2000000%5")
+        return
+
+    data = text[1].strip()
+
+    match = percent_pattern.match(data)
     if not match:
+        await message.answer("فرمت نامعتبره ❌")
         return
 
     total = int(match.group(1))
