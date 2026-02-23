@@ -39,7 +39,7 @@ async def main():
     dp.message.register(start_handler, CommandStart())
     dp.message.register(percent_handler, Command("darsad"))
 
-    dp.start_polling(bot)
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
