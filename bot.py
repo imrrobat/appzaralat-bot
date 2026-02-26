@@ -2,13 +2,9 @@ import asyncio
 import os
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message
-from aiogram.filters import CommandStart
 from dotenv import load_dotenv
 
-from handlers import math_tools
-
-from utils import START_MESSAGE
+from handlers import main_handlers, number_tools, text_tools
 
 
 load_dotenv()
@@ -18,14 +14,11 @@ bot = Bot(API)
 dp = Dispatcher()
 
 
-async def start_handler(pm: Message):
-    await pm.answer(START_MESSAGE)
-
-
 async def main():
-    dp.message.register(start_handler, CommandStart())
 
-    dp.include_router(math_tools.router)
+    dp.include_router(main_handlers.router)
+    dp.include_router(number_tools.router)
+    dp.include_router(text_tools.router)
 
     await dp.start_polling(bot)
 
