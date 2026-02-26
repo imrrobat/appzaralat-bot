@@ -27,3 +27,30 @@ async def percent_handler(message: Message):
     result = total * percent / 100
 
     await message.answer(f"{percent}٪ از {total:,} میشه {result:,.0f}")
+
+
+def convert_digits(text: str):
+    fa_to_en = str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789")
+    en_to_fa = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
+
+    if any(ch.isdigit() for ch in text):
+        return text.translate(en_to_fa)
+
+    if any(ch in "۰۱۲۳۴۵۶۷۸۹" for ch in text):
+        return text.translate(fa_to_en)
+
+    return text
+
+
+@router.message(Command("number"))
+async def number_command(message: Message):
+    parts = message.text.split("\n", 1)
+
+    if len(parts) < 2:
+        await message.answer("فرمت:\n/number\n123")
+        return
+
+    text = parts[1].strip()
+    converted = convert_digits(text)
+
+    await message.answer(converted)
