@@ -30,16 +30,22 @@ async def percent_handler(message: Message):
 
 
 def convert_digits(text: str):
-    fa_to_en = str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789")
-    en_to_fa = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
+    fa_digits = "۰۱۲۳۴۵۶۷۸۹"
+    en_digits = "0123456789"
 
-    if any(ch.isdigit() for ch in text):
-        return text.translate(en_to_fa)
+    fa_to_en = str.maketrans(fa_digits, en_digits)
+    en_to_fa = str.maketrans(en_digits, fa_digits)
 
-    if any(ch in "۰۱۲۳۴۵۶۷۸۹" for ch in text):
+    has_fa = any(ch in fa_digits for ch in text)
+    has_en = any(ch in en_digits for ch in text)
+
+    if has_fa and not has_en:
         return text.translate(fa_to_en)
 
-    return text
+    if has_en and not has_fa:
+        return text.translate(en_to_fa)
+
+    return text.translate(fa_to_en).translate(en_to_fa)
 
 
 @router.message(Command("number"))
